@@ -2,7 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 // Blocks
-import Camera from '../screens/Camera'
+import CameraScreen from '../screens/Camera'
 
 const Stack = createStackNavigator();
 
@@ -11,7 +11,7 @@ const Routes = () => {
     <Stack.Navigator>
       <Stack.Screen
         name="Camera"
-        component={Camera}
+        component={CameraScreen}
         options={{
           headerShown: false,
         }}
