@@ -63,10 +63,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 25
     },
-    video: {
-        alignSelf: 'center',
-        width: 350,
-        height: 220,
-    }, 
 })
 export default styles
