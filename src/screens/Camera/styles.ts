@@ -19,14 +19,21 @@ const styles = StyleSheet.create({
         flex: 1,
         marginHorizontal: 30,
     },
-    recordButton: {
+    buttonRecord: {
         borderWidth: 8,
         borderColor: '#ff404087',
         backgroundColor: '#ff4040',
-        // backgroundColor: '#ffffff',
         borderRadius: 100,
         height: 80,
         width: 80,
+        alignSelf: 'center'
+      },
+    buttonStop: {
+        marginVertical: 20,
+        height: 50,
+        width: 50,
+        borderRadius: 3,
+        backgroundColor: '#ff4343',
         alignSelf: 'center'
     },
     galleryButton: {
@@ -55,6 +62,11 @@ const styles = StyleSheet.create({
     sideBarButton: {
         alignItems: 'center',
         marginBottom: 25
-    }
+    },
+    video: {
+        alignSelf: 'center',
+        width: 350,
+        height: 220,
+    }, 
 })
 export default styles

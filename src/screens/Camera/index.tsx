@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, Image, Text} from "react-native";
 import { Camera } from "expo-camera";
-import { Audio } from "expo-av";
+import { Audio, Video } from "expo-av";
 import * as ImagePicker from 'expo-image-picker'
 import * as MediaLibrary from 'expo-media-library'
 
@@ -26,7 +26,12 @@ const CameraScreen = () => {
     const [cameraFlash, setCameraFlash] = useState(Camera.Constants.FlashMode.off)
     const [isCameraReady, setIsCameraReady] = useState(false)
 
+    const [isVideoRecording, setIsVideoRecording] = useState(false);
+
     const isFocused = useIsFocused()
+
+    // const [videoSource, setVideoSource] = useState(null);
+  
 
     useEffect(() => {
         (async ()=> {
@@ -51,12 +56,16 @@ const CameraScreen = () => {
                 try {
                     const options = { maxDuration: 15, quality: Camera.Constants.VideoQuality['480'] }
                     const videoRecordPromise = cameraRef.recordAsync(options)
-                    // if (videoRecordPromise) {
+                    if (videoRecordPromise) {
+                        // setIsVideoRecording(true);
+                        const data = await videoRecordPromise;
+                        const source = data.uri;
                     //     const data = await videoRecordPromise;
                     //     const source = data.uri
                     //     let sourceThumb = await generateThumbnail(source)
                     //     navigation.navigate('savePost', { source, sourceThumb })
-                    // }
+                    }
+                    else {setIsVideoRecording(false);}
                 } catch (error) {
                     console.warn(error)
                 }
@@ -66,6 +75,7 @@ const CameraScreen = () => {
         const stopVideo = async () => {
             if (cameraRef) {
                 cameraRef.stopRecording()
+                // setIsVideoRecording(false);
             }
         }
 
@@ -98,7 +108,18 @@ const CameraScreen = () => {
                     flashMode={cameraFlash}
                     onCameraReady={() => setIsCameraReady(true)}
                 />
-                : null}
+                 : null} 
+                {/* <Video
+                    ref={video}
+                    style={styles.video}
+                    source={{
+                        uri: record,
+                    }}
+                    useNativeControls
+                    resizeMode="contain"
+                    isLooping
+                    onPlaybackStatusUpdate={status => setStatus(() => status)}
+                /> */}
 
                 <View style={styles.sideBarContainer}>
                     <TouchableOpacity
@@ -127,7 +148,7 @@ const CameraScreen = () => {
                             onPress={() => recordVideo()}
                             onLongPress={() => recordVideo()}
                             onPressOut={() => stopVideo()}
-                            style={styles.recordButton}
+                            style={isVideoRecording ? styles.buttonStop : styles.buttonRecord}
                         />
                     </View>
 
