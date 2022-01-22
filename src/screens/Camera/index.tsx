@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity, Image, Text } from "react-native";
+import { View, TouchableOpacity, Image, Text, Button } from "react-native";
 import { Camera } from "expo-camera";
-import { Audio} from "expo-av";
+import { Audio } from "expo-av";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 
 import { Feather } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/core";
 import { useNavigation } from "@react-navigation/native";
+
+import { useInterval } from "usehooks-ts";
 
 import styles from "./styles";
 
@@ -30,6 +32,7 @@ const CameraScreen = () => {
   const [isCameraReady, setIsCameraReady] = useState(false);
 
   const isFocused = useIsFocused();
+  const [counter, setcounter] = useState(false);
 
   //
   const [isVideoRecording, setIsVideoRecording] = useState(false);
@@ -65,6 +68,7 @@ const CameraScreen = () => {
         };
         const videoRecordPromise = cameraRef.recordAsync(options);
         if (videoRecordPromise) {
+          setcounter(true);
           setIsVideoRecording(true);
           const data = await videoRecordPromise;
           const source = data.uri;
@@ -102,7 +106,29 @@ const CameraScreen = () => {
       // , sourceThumb
     }
   };
+  //
+  //
+  let [startingTime, setStartingTime] = useState<Number>();
+  const onStartRecording = async () => {
+    setStartingTime(Date.now());
+  };
 
+  let [currentTime, setCurrentTime] = useState(Date.now());
+
+  useInterval(() => {
+    setCurrentTime(Date.now());
+  }, 16);
+
+  const MAX_RECORDING_TIME = 15 * 1000;
+
+  let timePassed = currentTime - (startingTime || 0);
+  let recordingTimeLeft = MAX_RECORDING_TIME - timePassed;
+
+  let timeLeftSeconds = Math.max(0, recordingTimeLeft / 1000);
+
+  //
+  //
+  //
   if (!hasCameraPermissions || !hasAudioPermissions || !hasGalleryPermissions) {
     return <View></View>;
   }
@@ -152,10 +178,17 @@ const CameraScreen = () => {
       <View style={styles.bottomBarContainer}>
         <View style={{ flex: 1 }}></View>
         <View style={styles.recordButtonContainer}>
+          <Text style={counter ? styles.counter : styles.no}>
+            {" "}
+            {Math.floor(timeLeftSeconds)}
+          </Text>
           <TouchableOpacity
             disabled={!isCameraReady}
-            onPress={() => recordVideo()}
-            // onLongPress={() => recordVideo()}
+            onPress={() => {
+              recordVideo();
+              onStartRecording();
+            }}
+            onLongPress={() => recordVideo}
             onPressOut={() => stopVideo()}
             style={isVideoRecording ? styles.buttonStop : styles.buttonRecord}
           />

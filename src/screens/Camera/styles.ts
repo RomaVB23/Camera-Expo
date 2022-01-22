@@ -63,5 +63,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 25
     },
+    counter: {
+        color: 'white', 
+        position: 'absolute', 
+        top: -28, 
+        left: 46, 
+        fontSize: 25,
+    },
+    no:{
+        color: 'transparent'
+    }
 })
 export default styles
