@@ -1,39 +1,43 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { View, Text, TouchableOpacity, Button } from "react-native";
+import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { Video } from "expo-av";
-// import Video from 'react-native-video';
 
-// const video = React.useRef(null);
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 
-const EditVideoScreen = (props) => {
+const EditVideoScreen = (props:any) => {
   const navigation = useNavigation();
+  const video = React.useRef(null);
+  const [status, setStatus] = React.useState({});
   return (
     <View style={styles.container}>
       <Video
-        // ref={video}
+        ref={video}
         style={styles.video}
         source={{
           uri: props.route.params.source,
         }}
         useNativeControls
         resizeMode="contain"
-        resizeMode="cover"
         isLooping
-        // onPlaybackStatusUpdate={status => setStatus(() => status)}
+        onPlaybackStatusUpdate={(status) => setStatus(() => status)}
       />
-      {/* <Video
-            source={{uri: props.route.params.source}}
-            style={styles.video}
-            // onError={(e) => console.log(e)}
-            resizeMode={'cover'}
-            repeat={true}
-            // paused={paused}
-          /> */}
-          <View style={styles.spacer} />
+    
+      <View style={styles.spacer} />
       <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          onPress={() =>
+            status.isPlaying
+              ? video.current.pauseAsync()
+              : video.current.playAsync()
+          }
+          style={styles.playButton}
+        >
+          <FontAwesome5 name="play" size={24} color="white" />
+          <Text style={styles.playButtonText}>Play</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.cancelButton}
@@ -43,12 +47,18 @@ const EditVideoScreen = (props) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => handleSavePost()}
+          // onPress={() => handleSavePost()}
           style={styles.postButton}
         >
           <Feather name="corner-left-up" size={24} color="white" />
-          <Text style={styles.postButtonText}>Post</Text>
+          <Text style={styles.postButtonText}>Save</Text>
         </TouchableOpacity>
+        {/* <Button
+            title={status.isPlaying ? 'Pause' : 'Play'}
+            onPress={() =>
+              status.isPlaying ? video.current.pauseAsync() : video.current.playAsync()
+            }
+          /> */}
       </View>
     </View>
   );
@@ -56,4 +66,4 @@ const EditVideoScreen = (props) => {
 
 export default EditVideoScreen;
 
-// source={{ uri: props.route.params.source }}
+

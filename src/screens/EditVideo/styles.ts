@@ -17,6 +17,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         margin: 20,
     },
+    playButton: {
+        alignItems: 'center',
+        flex: 1,
+        borderColor: 'lightgray',
+        backgroundColor: 'green',
+        borderWidth: 1,
+        flexDirection: 'row',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        justifyContent: 'center',
+        borderRadius: 4,
+        marginRight: 10
+    },
     cancelButton: {
         alignItems: 'center',
         flex: 1,
@@ -39,6 +52,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 4,
         marginRight: 10
+    },
+    playButtonText: {
+        marginLeft: 5,
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 16
     },
     cancelButtonText: {
         marginLeft: 5,

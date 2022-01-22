@@ -65,7 +65,7 @@ const CameraScreen = () => {
         };
         const videoRecordPromise = cameraRef.recordAsync(options);
         if (videoRecordPromise) {
-          // setIsVideoRecording(true);
+          setIsVideoRecording(true);
           const data = await videoRecordPromise;
           const source = data.uri;
           navigation.navigate("EditVideo", { source });
@@ -85,7 +85,7 @@ const CameraScreen = () => {
   const stopVideo = async () => {
     if (cameraRef) {
       cameraRef.stopRecording();
-      // setIsVideoRecording(false);
+      setIsVideoRecording(false);
     }
   };
 
@@ -155,7 +155,7 @@ const CameraScreen = () => {
           <TouchableOpacity
             disabled={!isCameraReady}
             onPress={() => recordVideo()}
-            onLongPress={() => recordVideo()}
+            // onLongPress={() => recordVideo()}
             onPressOut={() => stopVideo()}
             style={isVideoRecording ? styles.buttonStop : styles.buttonRecord}
           />
