@@ -70,8 +70,5 @@ const styles = StyleSheet.create({
         left: 46, 
         fontSize: 25,
     },
-    no:{
-        color: 'transparent'
-    }
 })
 export default styles

@@ -32,14 +32,12 @@ const CameraScreen = () => {
   const [isCameraReady, setIsCameraReady] = useState(false);
 
   const isFocused = useIsFocused();
-  const [counter, setcounter] = useState(false);
 
   //
   const [isVideoRecording, setIsVideoRecording] = useState(false);
-
   useEffect(() => {
     (async () => {
-      const cameraStatus = await Camera.requestPermissionsAsync();
+      const cameraStatus = await Camera.requestCameraPermissionsAsync();
       setHasCameraPermissions(cameraStatus.status == "granted");
 
       const audioStatus = await Audio.requestPermissionsAsync();
@@ -68,18 +66,11 @@ const CameraScreen = () => {
         };
         const videoRecordPromise = cameraRef.recordAsync(options);
         if (videoRecordPromise) {
-          setcounter(true);
           setIsVideoRecording(true);
           const data = await videoRecordPromise;
           const source = data.uri;
           navigation.navigate("EditVideo", { source });
         }
-        // if (videoRecordPromise) {
-        //     const data = await videoRecordPromise;
-        //     const source = data.uri
-        //     let sourceThumb = await generateThumbnail(source)
-        //     navigation.navigate('savePost', { source, sourceThumb })
-        // }
       } catch (error) {
         console.warn(error);
       }
@@ -101,9 +92,7 @@ const CameraScreen = () => {
       quality: 1,
     });
     if (!result.cancelled) {
-      // let sourceThumb = await generateThumbnail(result.uri)
       navigation.navigate("EditVideo", { source: result.uri });
-      // , sourceThumb
     }
   };
   //
@@ -119,12 +108,22 @@ const CameraScreen = () => {
     setCurrentTime(Date.now());
   }, 16);
 
-  const MAX_RECORDING_TIME = 15 * 1000;
+  const MAX_RECORDING_TIME = 16 * 1000;
 
   let timePassed = currentTime - (startingTime || 0);
   let recordingTimeLeft = MAX_RECORDING_TIME - timePassed;
 
   let timeLeftSeconds = Math.max(0, recordingTimeLeft / 1000);
+
+  const renderVideoRecordIndicator = () => (
+    <View>
+      <progress
+        value={timeLeftSeconds * 1000}
+        max={MAX_RECORDING_TIME}
+      ></progress>
+      <Text style={styles.counter}>{Math.floor(timeLeftSeconds)}</Text>
+    </View>
+  );
 
   //
   //
@@ -178,17 +177,14 @@ const CameraScreen = () => {
       <View style={styles.bottomBarContainer}>
         <View style={{ flex: 1 }}></View>
         <View style={styles.recordButtonContainer}>
-          <Text style={counter ? styles.counter : styles.no}>
-            {" "}
-            {Math.floor(timeLeftSeconds)}
-          </Text>
+          {isVideoRecording && renderVideoRecordIndicator()}
           <TouchableOpacity
             disabled={!isCameraReady}
             onPress={() => {
               recordVideo();
               onStartRecording();
             }}
-            onLongPress={() => recordVideo}
+            onLongPress={() => recordVideo()}
             onPressOut={() => stopVideo()}
             style={isVideoRecording ? styles.buttonStop : styles.buttonRecord}
           />
