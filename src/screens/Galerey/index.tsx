@@ -4,7 +4,7 @@ import React from "react";
 const Galerey = () => {
   return (
     <View>
-      <Text>Galerey</Text>
+      <Text>Galerey in proces</Text>
     </View>
   );
 };
